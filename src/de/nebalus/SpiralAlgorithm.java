@@ -44,7 +44,7 @@ public class SpiralAlgorithm implements Cloneable {
 		int cachex = (level * -1) + 1;
 		int cachey = level;
 
-		for (int currentunit = allunitstolevel + 1; currentunit < allunits; currentunit++) 
+		for (int currentunit = allunitstolevel + 1; currentunit <= allunits; currentunit++) 
 		{
 			if (currentunit < unitid) 
 			{
@@ -84,6 +84,7 @@ public class SpiralAlgorithm implements Cloneable {
 			{
 				this.x = cachex;
 				this.y = cachey;
+				break;
 			}
 		}
 	}
@@ -112,7 +113,7 @@ public class SpiralAlgorithm implements Cloneable {
 		
 		this.unitid = allunitstolevel + 1;
 		
-		for (int currentunit = this.unitid; currentunit < allunits; currentunit++) 
+		for (int currentunit = this.unitid; currentunit <= allunits; currentunit++) 
 		{
 			
 			if (cachex != xcord || cachey != ycord) 
@@ -154,6 +155,7 @@ public class SpiralAlgorithm implements Cloneable {
 			{
 				this.x = xcord;
 				this.y = ycord;
+				break;
 			}
 		}
 	}
@@ -175,25 +177,28 @@ public class SpiralAlgorithm implements Cloneable {
 		return level - 1;
 	}
 	
-	private final int getLevel(int xcord, int ycord) 
+	private final int getLevel(final int xcord, final int ycord) 
 	{		
-		if(xcord < 0) 
+		int positivx = xcord; 
+		int positivy = ycord; 
+		
+		if(positivx < 0) 
 		{
-			xcord = xcord * 1;
+			positivx = xcord * 1;
 		}
 		
-		if(ycord < 0) 
+		if(positivy < 0) 
 		{
-			ycord = ycord * -1;
+			positivy = ycord * 1;
 		}
 
-		if(xcord > ycord) 
+		if(positivx > positivy) 
 		{
-			return xcord;
+			return positivx;
 		}
 		else 
 		{
-			return ycord;
+			return positivy;
 		}
 	}
 
