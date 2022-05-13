@@ -1,14 +1,16 @@
 package de.nebalus;
 
-public final class SpiralAlgorithm {
+public class SpiralAlgorithm implements Cloneable {
 
-	int unitid = -1;
+	private int unitid = -1;
 
-	int xcord = 0;
-	int ycord = 0;
+	private int x = 0;
+	private int y = 0;
 
-	public SpiralAlgorithm(int unitid) throws IllegalArgumentException {
-		if (unitid <= 0) {
+	public SpiralAlgorithm(final int unitid) throws IllegalArgumentException 
+	{
+		if (unitid <= 0) 
+		{
 			throw new IllegalArgumentException("You cannot use a 0 or a negative number!");
 		}
 
@@ -17,6 +19,13 @@ public final class SpiralAlgorithm {
 		// Speichert bei welche schicht wo sich die unitid sich befindet!
 		final int level = getLevel(unitid);
 
+		if (level == 0) 
+		{
+			x = 0;
+			y = 0;
+			return;
+		}
+		
 		// Speichert die anzahl von units die sich an einer seite sich befinden
 		final int levelsideunits = getAmountOfUnitsOfALevelSide(level);
 
@@ -32,74 +41,56 @@ public final class SpiralAlgorithm {
 
 		Direction direction = Direction.RIGHT;
 
-		if (level == 0) {
-			xcord = 0;
-			ycord = 0;
-			return;
-		}
-
 		int cachex = (level * -1) + 1;
 		int cachey = level;
 
-		for (int currentunit = allunitstolevel + 1; currentunit <= allunits; currentunit++) {
-			if (currentunit < unitid) {
-				switch (direction) {
+		for (int currentunit = allunitstolevel + 1; currentunit < allunits; currentunit++) 
+		{
+			if (currentunit < unitid) 
+			{
+				switch (direction) 
+				{
 				case RIGHT:
 					cachex++;
-					if (cachex >= level) {
+					if (cachex >= level) 
+					{
 						direction = Direction.DOWN;
 					}
 					break;
 				case DOWN:
 					cachey--;
-					if (cachey <= level * -1) {
+					if (cachey <= level * -1) 
+					{
 						direction = Direction.LEFT;
 					}
 					break;
 				case LEFT:
 					cachex--;
-					if (cachex <= level * -1) {
+					if (cachex <= level * -1) 
+					{
 						direction = Direction.UP;
 					}
 					break;
 				case UP:
 					cachey++;
-					if (cachey >= level) {
+					if (cachey >= level) 
+					{
 						direction = Direction.RIGHT;
 					}
 					break;
 				}
-			}else {
-				this.xcord = cachex;
-				this.ycord = cachey;
+			}
+			else 
+			{
+				this.x = cachex;
+				this.y = cachey;
 			}
 		}
 	}
 	
-	public SpiralAlgorithm(int xcord, int ycord) {
+	public SpiralAlgorithm(final int xcord, final int ycord) {
 
-		final int positivx; 
-		final int positivy; 
-		
-		if(xcord < 0) {
-			positivx = xcord * -1;
-		}else {
-			positivx = xcord;
-		}
-		
-		if(ycord < 0) {
-			positivy = ycord * -1;
-		}else {
-			positivy = ycord;
-		}
-			
-		final int level;
-
-		if(positivx >= positivy) {
-			level = positivx;
-		}else {
-			level = positivy;
-		}
+		final int level = getLevel(xcord, ycord);
 		
 		// Speichert die anzahl von units die sich an einer seite sich befinden
 		final int levelsideunits = getAmountOfUnitsOfALevelSide(level);
@@ -121,80 +112,125 @@ public final class SpiralAlgorithm {
 		
 		this.unitid = allunitstolevel + 1;
 		
-		for (int currentunit = this.unitid; currentunit <= allunits; currentunit++) {
+		for (int currentunit = this.unitid; currentunit < allunits; currentunit++) 
+		{
 			
-			if (cachex != xcord || cachey != ycord) {
+			if (cachex != xcord || cachey != ycord) 
+			{
 				this.unitid++;
-				switch (direction) {
+				switch (direction) 
+				{
 				case RIGHT:
 					cachex++;
-					if (cachex >= level) {
+					if (cachex >= level) 
+					{
 						direction = Direction.DOWN;
 					}
 					break;
 				case DOWN:
 					cachey--;
-					if (cachey <= level * -1) {
+					if (cachey <= level * -1) 
+					{
 						direction = Direction.LEFT;
 					}
 					break;
 				case LEFT:
 					cachex--;
-					if (cachex <= level * -1) {
+					if (cachex <= level * -1) 
+					{
 						direction = Direction.UP;
 					}
 					break;
 				case UP:
 					cachey++;
-					if (cachey >= level) {
+					if (cachey >= level) 
+					{
 						direction = Direction.RIGHT;
 					}
 					break;
 				}
-			}else {
-				this.xcord = xcord;
-				this.ycord = ycord;
+			}
+			else 
+			{
+				this.x = xcord;
+				this.y = ycord;
 			}
 		}
 	}
 
 	// Gebt die ebene wo sich die unitid, sich befindet zurück!
-	private final int getLevel(int unitid) {
+	private final int getLevel(final int unitid) 
+	{
 		if (unitid == 1)
 			return 0;
 
 		int currentmax = 1;
 		int level = 0;
 
-		while (currentmax < unitid) {
+		while (currentmax < unitid) 
+		{
 			currentmax = currentmax + getAmountOfUnitsOfLevel(level);
 			level++;
 		}
 		return level - 1;
 	}
+	
+	private final int getLevel(int xcord, int ycord) 
+	{		
+		if(xcord < 0) 
+		{
+			xcord = xcord * 1;
+		}
+		
+		if(ycord < 0) 
+		{
+			ycord = ycord * -1;
+		}
 
-	private final int getAmountOfUnitsOfLevel(int level) {
+		if(xcord > ycord) 
+		{
+			return xcord;
+		}
+		else 
+		{
+			return ycord;
+		}
+	}
+
+	private final int getAmountOfUnitsOfLevel(final int level) 
+	{
 		return (getAmountOfUnitsOfALevelSide(level) * 4) - 4;
 	}
 
-	private final int getAmountOfUnitsOfALevelSide(int level) {
+	private final int getAmountOfUnitsOfALevelSide(final int level) 
+	{
 		return 1 + (level * 2);
 	}
 
-	public final int getYCord() {
-		return ycord;
+	public final int getYCord() 
+	{
+		return y;
 	}
 
-	public final int getXCord() {
-		return xcord;
+	public final int getXCord() 
+	{
+		return x;
 	}
 
-	public final int getUnit() {
+	public final int getUnitId() 
+	{
 		return unitid;
 	}
 	
-	private enum Direction {
+	private enum Direction 
+	{
 		RIGHT, DOWN, LEFT, UP;
 	}
+
+	
+//	@Override
+//	public boolean equals(SpiralAlgorithm othersa) {
+//		if(othersa.getXCord() == xcord)
+//	}
 
 }
